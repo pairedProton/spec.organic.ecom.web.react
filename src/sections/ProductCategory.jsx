@@ -2,6 +2,7 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
+import { Link } from "react-router-dom";
 
 const ProductCategory = ({ productArray = [], categoryTitle = "" }) => {
   const productCategoryData = productArray;
@@ -41,10 +42,10 @@ const ProductCategory = ({ productArray = [], categoryTitle = "" }) => {
           loop={true}
           className="w-full "
         >
-          <div className=" aaa flex items-center justify-center w-full !bg-amber-300 ">
+          <div className=" aaa flex items-center justify-center w-full ">
             {productCategoryData.map((product, index) => (
               <SwiperSlide key={index} className="h-auto">
-                <div className="flex flex-col bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
+                <Link to={'/product'} className="flex flex-col bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 h-full">
                   {/* Product Image */}
                   <div className="w-full aspect-square bg-gradient-to-b from-green-50 to-amber-50 flex items-center justify-center p-4">
                     <img
@@ -78,7 +79,7 @@ const ProductCategory = ({ productArray = [], categoryTitle = "" }) => {
                       Add to Cart
                     </button>
                   </div>
-                </div>
+                </Link>
               </SwiperSlide>
             ))}
           </div>

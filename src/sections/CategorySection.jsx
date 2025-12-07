@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const CategorySection = () => {
 
@@ -54,13 +55,13 @@ const CategorySection = () => {
                 <div className='absolute bottom-0 left-0 right-0 h-1/2 bg-amber-50'></div>
               </div>
               {/* Image content */}
-              <div className='relative w-full h-full flex items-center justify-center'>
+              <Link to={'/category'} className='relative w-full h-full flex items-center justify-center'>
                 <img 
                   src={category.image} 
                   alt={category.title}
                   className='w-full h-full object-contain z-10 hover:scale-105 transition-all duration-300 '
                 />
-              </div>
+              </Link >
             </div>
             {/* Category Name */}
             <h3 className=' font-semibold text-xl text-gray-800 text-center'>
