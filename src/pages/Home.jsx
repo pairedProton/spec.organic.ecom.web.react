@@ -5,6 +5,8 @@ import CategorySection from "../sections/CategorySection";
 import ProductCategory from "../sections/ProductCategory";
 import ProductMeritSection from "../sections/ProductMeritSection";
 import ReviewSection from "../sections/ReviewSection";
+import VideoSection from "../sections/VideoSection";
+import { bannerImages, productImages } from "../assets/images";
 
 const Home = () => {
   const Category1Data = [
@@ -13,95 +15,95 @@ const Home = () => {
       cost: 299,
       sellingPrice: 230,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.amlapowder,
     },
     {
       title: "Combo Ghee & Jaggery",
       cost: 959,
       sellingPrice: 817,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.ghee,
     },
     {
       title: "Combo Honey, Stevia & Jaggery",
       cost: 440,
       sellingPrice: 433,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.honey,
     },
     {
       title: "Immunity Capsules",
       cost: 285,
       sellingPrice: 267,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.immunity,
     },
     {
       title: "Tulsi Mulethi Green Tea",
       cost: 260,
       sellingPrice: 260,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.tulsigreentea,
     },
     {
       title: "Tulsi Mulethi Green Tea",
       cost: 260,
       sellingPrice: 260,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.tulsitea,
     },
     {
-      title: "Tulsi Mulethi Green Tea",
+      title: "Quinoa",
       cost: 260,
       sellingPrice: 260,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.quinoa,
     },
     {
-      title: "Tulsi Mulethi Green Tea",
+      title: "Triphla",
       cost: 260,
       sellingPrice: 260,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.triphla,
     },
   ];
 
   const BestSellingData = [
     {
-      title: "Tulsi Mulethi Green Tea",
+      title: "Tulsi Honey Green Tea",
       cost: 260,
       sellingPrice: 260,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.tulsihoney,
     },
 
     {
-      title: "Tulsi Mulethi Green Tea",
+      title: "Tulsi Tea",
       cost: 260,
       sellingPrice: 260,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.tulsitea,
     },
     {
-      title: "Tulsi Mulethi Green Tea",
+      title: "Turmeric Immunity",
       cost: 260,
       sellingPrice: 260,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.turmericimmun,
     },
     {
-      title: "Tulsi Mulethi Green Tea",
+      title: "Uptan",
       cost: 260,
       sellingPrice: 260,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.uptan,
     },
     {
-      title: "Tulsi Mulethi Green Tea",
+      title: "Cleanseshake",
       cost: 260,
       sellingPrice: 260,
       imageURL:
-        "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+        productImages.cleanseshake,
     },
   ];
 
@@ -193,6 +195,7 @@ const Home = () => {
         productArray={Category1Data}
         categoryTitle="Immunity Boosters"
       ></ProductCategory>
+      <VideoSection></VideoSection>
 
       <ProductCategory
         productArray={BestSellingData}

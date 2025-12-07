@@ -1,16 +1,14 @@
 import React from 'react'
-
+import { productImages } from '../assets/images';
 const Product = () => {
   const product = {
     title: "Tulsi Green Tea Pomegranate Flavour",
     brand: "Organic India",
     imageMain:
-      "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
+      productImages.tulsigreentea,
     imageThumbs: [
-      "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
-      "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
-      "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148",
-      "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148"
+      productImages.tulsigreentea,
+      productImages.tulsigreentea,
     ],
     variant: "25 Infusion Bag",
     sku: "140059",

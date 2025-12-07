@@ -5,6 +5,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs";
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { logoImages } from '../assets/images'
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -87,7 +88,7 @@ const Navbar = () => {
       <Link to={"/"} className="w-24 aspect-square  -ml-30 lg:ml-0">
         <img
           className="w-full h-full object-center object-contain"
-          src="https://organicindia.com/cdn/shop/files/logo-120x120_2.jpg?v=1743768667"
+          src={logoImages.lightlogo}
           alt=""
         />
       </Link>

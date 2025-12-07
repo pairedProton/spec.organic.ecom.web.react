@@ -1,44 +1,53 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+// import teaHoney from '../assets/images/products/tulsihoney.png'
+// import immunity from '../assets/images/products/immun.png'
+// import ghee from '../assets/images/products/ghee.png'
+// import Jaggery from '../assets/images/products/jaggery.png'
+// import uptan from '../assets/images/products/uptan.png'
+// import triphla from '../assets/images/products/triphla.png'
+// import gift from '../assets/images/products/gift.png'
+// import moringa from '../assets/images/products/moringa.png'
+
+import { productImages } from '../assets/images'
 
 const CategorySection = () => {
 
     const categorySectionData = [
-            {
-                image: 'https://organicindia.com/cdn/shop/files/tea_2_1.png?v=1737615774',
-                title: 'Teas & Infusion',
-            },
-            {
-                image: 'https://organicindia.com/cdn/shop/files/supplement_1.png?v=1737615800',
-                title: 'Herbal Supplement',
-            },
-            {
-                image: 'https://organicindia.com/cdn/shop/files/website_bottons_b27ea7b5-99a4-4d65-8749-f39b79fc3c92.png?v=1744792967',
-                title: 'Packaged Food',
-            },
-            {
-                image: 'https://organicindia.com/cdn/shop/files/oil-n-ghee_1.png?v=1737615847',
-                title: 'Personal Care',
-            },
-            {
-                image: 'https://organicindia.com/cdn/shop/files/healthfood_1.png?v=1737615889',
-                title: 'Detox Program',
-            },
-            {
-                image: 'https://organicindia.com/cdn/shop/files/kure.png?v=1737616073',
-                title: 'Gifting',
-            },
+      {
+        image: productImages.tulsihoney,
+        title: "Teas & Infusion",
+      },
 
-            {
-                image: 'https://organicindia.com/cdn/shop/files/healthfood_1.png?v=1737615889',
-                title: 'Detox Program',
-            },
-            {
-                image: 'https://organicindia.com/cdn/shop/files/kure.png?v=1737616073',
-                title: 'Gifting',
-            },
-        
-    ]
+      {
+        image: productImages.jaggery,
+        title: "Packaged Food",
+      },
+      {
+        image: productImages.cleanseshake,
+        title: "Personal Care",
+      },
+      {
+        image: productImages.tulsitea,
+        title: "Detox Program",
+      },
+      {
+        image: productImages.gift,
+        title: "Gifting",
+      },
+      {
+        image: productImages.ghee,
+        title: "Oil and Ghee",
+      },
+      {
+        image: productImages.moringa,
+        title: "Trending Organic",
+      },
+      {
+        image: productImages.immunity,
+        title: "Herbal Supplement",
+      },
+    ];
 
   return (
     <div className='container mx-auto w-full h-auto py-12 px-10 ' >

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-
+import { productImages, bannerImages } from '../assets/images';
 
 
 const Category = () => {
@@ -32,21 +32,116 @@ const Category = () => {
     }
   ];
 
-  const products = Array.from({ length: 12 }).map((_, index) => ({
+  const Category1Data = [
+    {
+      title: "Organic Amla Powder",
+      cost: 299,
+      sellingPrice: 230,
+      imageURL: productImages.amlapowder,
+    },
+    {
+      title: "Combo Ghee & Jaggery",
+      cost: 959,
+      sellingPrice: 817,
+      imageURL: productImages.ghee,
+    },
+    {
+      title: "Combo Honey, Stevia & Jaggery",
+      cost: 440,
+      sellingPrice: 433,
+      imageURL: productImages.honey,
+    },
+    {
+      title: "Immunity Capsules",
+      cost: 285,
+      sellingPrice: 267,
+      imageURL: productImages.immunity,
+    },
+    {
+      title: "Tulsi Mulethi Green Tea",
+      cost: 260,
+      sellingPrice: 260,
+      imageURL: productImages.tulsigreentea,
+    },
+    {
+      title: "Tulsi Mulethi Green Tea",
+      cost: 260,
+      sellingPrice: 260,
+      imageURL: productImages.tulsitea,
+    },
+    {
+      title: "Quinoa",
+      cost: 260,
+      sellingPrice: 260,
+      imageURL: productImages.quinoa,
+    },
+    {
+      title: "Triphla",
+      cost: 260,
+      sellingPrice: 260,
+      imageURL: productImages.triphla,
+    },
+  ];
+
+  const BestSellingData = [
+    {
+      title: "Tulsi Honey Green Tea",
+      cost: 260,
+      sellingPrice: 260,
+      imageURL: productImages.tulsihoney,
+    },
+    {
+      title: "Tulsi Tea",
+      cost: 260,
+      sellingPrice: 260,
+      imageURL: productImages.tulsitea,
+    },
+    {
+      title: "Turmeric Immunity",
+      cost: 260,
+      sellingPrice: 260,
+      imageURL: productImages.turmericimmun,
+    },
+    {
+      title: "Uptan",
+      cost: 260,
+      sellingPrice: 260,
+      imageURL: productImages.uptan,
+    },
+    {
+      title: "Cleanseshake",
+      cost: 260,
+      sellingPrice: 260,
+      imageURL: productImages.cleanseshake,
+    },
+  ];
+
+  // Combine both arrays and remove duplicates based on imageURL
+  const allProducts = [...Category1Data, ...BestSellingData];
+  const seenImages = new Set();
+  const uniqueProducts = allProducts.filter((product) => {
+    if (seenImages.has(product.imageURL)) {
+      return false;
+    }
+    seenImages.add(product.imageURL);
+    return true;
+  });
+
+  // Map to the expected format and name it categoryProducts
+  const categoryProducts = uniqueProducts.map((product, index) => ({
     id: index + 1,
-    name: "Tulsi Green Tea Classic",
-    price: 198,
-    mrp: 245,
-    image:
-      "https://organicindia.com/cdn/shop/files/Original_558X600_crop_center.jpg?v=1749103148"
+    name: product.title,
+    price: product.sellingPrice,
+    mrp: product.cost,
+    image: product.imageURL,
   }));
 
   
   return (
     <div className='w-full h-auto' >
-      <div className="catBannerSec relative w-full h-70 bg-amber-300 ">
+      <div className="catBannerSec relative w-full h-120 bg-amber-300 ">
         <div className="absolute top-0 left-0 w-full h-full">
-          <img  className='w-full h-full object-center object-cover' src="https://organicindia.com/cdn/shop/files/Diwali-gifts.jpg?v=1760505318" alt="" />
+          <img  className='w-full h-full object-center object-cover' src={bannerImages.gift} alt="" />
         </div>
       </div>
 
@@ -92,7 +187,7 @@ const Category = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((p) => (
+            {categoryProducts.map((p) => (
               <Link to={'/product'} key={p.id} className="group">
                 <div className="w-[80%] aspect-3/4 rounded-md overflow-hidden ">
                   <img

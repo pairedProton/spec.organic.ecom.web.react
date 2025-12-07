@@ -71,8 +71,8 @@ const Footer = () => {
                     {/* Get in Touch */}
                     <div>
                         <h3 className='text-white font-semibold mb-2 text-base md:text-lg'>Get in Touch</h3>
-                        <a href="mailto:care@tataconsumer.com" className='text-white hover:text-green-200 transition-colors text-sm md:text-base'>
-                            care@tataconsumer.com
+                        <a href="mailto:care@taurusorganic.com" className='text-white hover:text-green-200 transition-colors text-sm md:text-base'>
+                            care@taurusorganic.com
                         </a>
                     </div>
 
@@ -86,16 +86,16 @@ const Footer = () => {
                     {/* International Business */}
                     <div>
                         <h3 className='text-white font-semibold mb-2 text-base md:text-lg'>For International Business</h3>
-                        <a href="mailto:export@organicindia.com" className='text-white hover:text-green-200 transition-colors text-sm md:text-base'>
-                            export@organicindia.com
+                        <a href="mailto:export@taurusorganic.com" className='text-white hover:text-green-200 transition-colors text-sm md:text-base'>
+                            export@taurusorganic.com
                         </a>
                     </div>
 
                     {/* Corporate Gifting */}
                     <div>
                         <h3 className='text-white font-semibold mb-2 text-base md:text-lg'>For Corporate / Institutional Gifting</h3>
-                        <a href="mailto:gifting@organicindia.com" className='text-white hover:text-green-200 transition-colors text-sm md:text-base block mb-1'>
-                            gifting@organicindia.com
+                            <a href="mailto:gifting@taurusorganic.com" className='text-white hover:text-green-200 transition-colors text-sm md:text-base block mb-1'>
+                            gifting@taurusorganic.com
                         </a>
                         <a href="tel:9151777907" className='text-white hover:text-green-200 transition-colors text-sm md:text-base'>
                             9151777907
@@ -128,7 +128,7 @@ const Footer = () => {
         <div className='relative z-10 w-full bg-amber-600 py-4'>
             <div className='container mx-auto px-8 md:px-12'>
                 <p className='text-center text-white text-sm md:text-base'>
-                    Copyright © 2024 Organic India Pvt. Ltd.
+                    Copyright © 2025 Taurus Organic India. All rights reserved.
                 </p>
             </div>
         </div>

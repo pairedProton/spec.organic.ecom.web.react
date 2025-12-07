@@ -6,22 +6,20 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
+import { bannerImages } from '../assets/images'
 
 const SwiperHeroSection = () => {
 
     const heroSec1SwiperSlides = [
         {
-            image: 'https://organicindia.com/cdn/shop/files/Diwali-gifts.jpg?v=1760505318',
+            image: bannerImages.products,
         },
         {
-            image:'https://organicindia.com/cdn/shop/files/Diwali-gifts.jpg?v=1760505318'
+            image: bannerImages.immunity,
         },
         {
-            image:'https://organicindia.com/cdn/shop/files/website-banner-1920x600.jpg?v=1751021100'
+            image: bannerImages.gift,
         },
-        {
-            image:'https://organicindia.com/cdn/shop/files/bilona-website-banner.jpg?v=1749185603'
-        }
     ]
 
   return (
