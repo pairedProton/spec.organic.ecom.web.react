@@ -7,14 +7,14 @@ import 'swiper/css/pagination'
 const ReviewSection = ({reviewsData}) => {
 
   return (
-    <div className='w-full min-h-[600px] py-12 px-10 relative'>
+    <div className='w-full min-h-[600px] py-12 px-10 relative z-10 '>
         {/* Background Image */}
-        <div className="absolute -z-10 top-0 left-0 w-full h-full">
+        <div className="absolute z-4 top-0 left-0 w-full h-full">
             <img className='w-full h-full object-cover object-center' src="https://organicindia.com/cdn/shop/files/1920-X-830-testimonial.png?v=1666267004" alt="" />
         </div>
 
         {/* Content */}
-        <div className='relative z-10 container mx-auto flex flex-col items-center justify-center min-h-[600px]'>
+        <div className='relative z-8 container mx-auto flex flex-col items-center justify-center min-h-[600px]'>
             {/* Section Title */}
             <h2 className='text-3xl md:text-4xl font-semibold text-white mb-4 text-center'>Customers Love</h2>
             

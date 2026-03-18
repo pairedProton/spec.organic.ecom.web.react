@@ -25,15 +25,15 @@ const Footer = () => {
   ]
 
   return (
-    <div className='w-full relative bg-emerald-950'>
+    <div className='w-full relative bg-emerald-900 font-[Open Sans] '>
         {/* Background with leaf patterns */}
-        <div className="absolute top-0 left-0 w-full h-full opacity-80">
+        {/* <div className="absolute top-0 left-0 w-full h-full opacity-80">
             <img 
                 src="https://organicindia.com/cdn/shop/files/1920-X-830-testimonial.png?v=1666267004" 
                 alt="" 
                 className='w-full h-full object-cover object-center'
             />
-        </div>
+        </div> */}
 
         {/* Main Footer Content */}
         <div className='relative z-10 container mx-auto px-8 md:px-12 py-12'>
@@ -70,7 +70,7 @@ const Footer = () => {
                 <div className='flex flex-col gap-6'>
                     {/* Get in Touch */}
                     <div>
-                        <h3 className='text-white font-semibold mb-2 text-base md:text-lg'>Get in Touch</h3>
+                        <h3 className='text-white  mb-2 text-base md:text-lg font-[Montserrat]'>Get in Touch</h3>
                         <a href="mailto:care@taurusorganic.com" className='text-white hover:text-green-200 transition-colors text-sm md:text-base'>
                             care@taurusorganic.com
                         </a>
@@ -78,14 +78,14 @@ const Footer = () => {
 
                     {/* Toll Free */}
                     <div>
-                        <h3 className='text-white font-semibold mb-2 text-base md:text-lg'>Toll Free:</h3>
+                        <h3 className='text-white mb-2 text-base md:text-lg font-[Montserrat] '>Toll Free:</h3>
                         <p className='text-white text-sm md:text-base'>1800-108-4488</p>
                         <p className='text-white text-sm md:text-base'>10am to 7pm (Monday to Saturday)</p>
                     </div>
 
                     {/* International Business */}
                     <div>
-                        <h3 className='text-white font-semibold mb-2 text-base md:text-lg'>For International Business</h3>
+                        <h3 className='text-white  mb-2 text-base md:text-lg font-[Montserrat] '>For International Business</h3>
                         <a href="mailto:export@taurusorganic.com" className='text-white hover:text-green-200 transition-colors text-sm md:text-base'>
                             export@taurusorganic.com
                         </a>
@@ -93,7 +93,7 @@ const Footer = () => {
 
                     {/* Corporate Gifting */}
                     <div>
-                        <h3 className='text-white font-semibold mb-2 text-base md:text-lg'>For Corporate / Institutional Gifting</h3>
+                        <h3 className='text-white mb-2 text-base md:text-lg font-[Montserrat]'>For Corporate / Institutional Gifting</h3>
                             <a href="mailto:gifting@taurusorganic.com" className='text-white hover:text-green-200 transition-colors text-sm md:text-base block mb-1'>
                             gifting@taurusorganic.com
                         </a>
@@ -125,9 +125,9 @@ const Footer = () => {
         </div>
 
         {/* Bottom Copyright Bar */}
-        <div className='relative z-10 w-full bg-amber-600 py-4'>
+        <div className='relative z-10 w-full bg-white py-4'>
             <div className='container mx-auto px-8 md:px-12'>
-                <p className='text-center text-white text-sm md:text-base'>
+                <p className='text-center text-emerald-950 text-sm md:text-base'>
                     Copyright © 2025 Taurus Organic India. All rights reserved.
                 </p>
             </div>

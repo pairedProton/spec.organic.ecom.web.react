@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import ProductCard from '../components/ProductCard';
 import { productImages, bannerImages } from '../assets/images';
 
 
@@ -130,10 +131,10 @@ const Category = () => {
   // Map to the expected format and name it categoryProducts
   const categoryProducts = uniqueProducts.map((product, index) => ({
     id: index + 1,
-    name: product.title,
-    price: product.sellingPrice,
-    mrp: product.cost,
-    image: product.imageURL,
+    title: product.title,
+    sellingPrice: product.sellingPrice,
+    cost: product.cost,
+    imageURL: product.imageURL,
   }));
 
   
@@ -186,27 +187,9 @@ const Category = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {categoryProducts.map((p) => (
-              <Link to={'/product'} key={p.id} className="group">
-                <div className="w-[80%] aspect-3/4 rounded-md overflow-hidden ">
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    className="w-full h-full object-contain object-center transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-                <div className="mt-3">
-                  <h4 className="text-base">{p.name}</h4>
-                  <div className="mt-1 flex items-center gap-2">
-                    <span className="text-sm font-semibold">₹ {p.price}</span>
-                    <span className="text-xs line-through text-gray-400">₹ {p.mrp}</span>
-                  </div>
-                  <button className="mt-3 px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800 text-sm">
-                    Add to Cart
-                  </button>
-                </div>
-              </Link>
+              <ProductCard key={p.id} product={p} />
             ))}
           </div>
         </section>

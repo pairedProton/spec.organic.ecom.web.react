@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { productImages } from '../assets/images';
+import { useCart } from '../context/CartContext';
 const Product = () => {
+  const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState(1);
+
   const product = {
+    id: "140059",
     title: "Tulsi Green Tea Pomegranate Flavour",
     brand: "Organic India",
     imageMain:
@@ -48,6 +53,26 @@ const Product = () => {
         a: "We recommend drinking it without milk."
       }
     ]
+  };
+
+  const incrementQuantity = () => {
+    setQuantity((prev) => prev + 1);
+  };
+
+  const decrementQuantity = () => {
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  };
+
+  const handleAddToCart = () => {
+    addToCart(
+      {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        imageURL: product.imageMain,
+      },
+      quantity
+    );
   };
 
   return (
@@ -114,16 +139,20 @@ const Product = () => {
 
             <div className="mt-6 flex  flex-col md:flex-row items-start md:items-center gap-4">
               <div className="flex items-center  rounded">
-                <button className="px-3 py-2">-</button>
-                <span className="px-4 select-none">1</span>
-                <button className="px-3 py-2">+</button>
+                <button type="button" className="px-3 py-2" onClick={decrementQuantity}>-</button>
+                <span className="px-4 select-none">{quantity}</span>
+                <button type="button" className="px-3 py-2" onClick={incrementQuantity}>+</button>
               </div>
               <div className='flex flex-col md:flex-row gap-2' >
                 
-              <button className="px-6 py-3 bg-green-700 text-white rounded hover:bg-green-800">
+              <button
+                type="button"
+                className="px-6 py-3 bg-green-700 text-white rounded hover:bg-green-800"
+                onClick={handleAddToCart}
+              >
                 ADD TO CART
               </button>
-              <button className="px-6 py-3 bg-emerald-600 text-white rounded hover:bg-emerald-700">
+              <button type="button" className="px-6 py-3 bg-emerald-600 text-white rounded hover:bg-emerald-700">
                 BUY NOW
               </button>
               </div>

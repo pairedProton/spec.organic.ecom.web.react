@@ -1,112 +1,13 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import SwiperHeroSection from "../sections/SwiperHeroSection";
 import CategorySection from "../sections/CategorySection";
 import ProductCategory from "../sections/ProductCategory";
 import ProductMeritSection from "../sections/ProductMeritSection";
 import ReviewSection from "../sections/ReviewSection";
 import VideoSection from "../sections/VideoSection";
-import { bannerImages, productImages } from "../assets/images";
+import { Category1Data, BestSellingData } from "../data/products";
 
 const Home = () => {
-  const Category1Data = [
-    {
-      title: "Organic Amla Powder",
-      cost: 299,
-      sellingPrice: 230,
-      imageURL:
-        productImages.amlapowder,
-    },
-    {
-      title: "Combo Ghee & Jaggery",
-      cost: 959,
-      sellingPrice: 817,
-      imageURL:
-        productImages.ghee,
-    },
-    {
-      title: "Combo Honey, Stevia & Jaggery",
-      cost: 440,
-      sellingPrice: 433,
-      imageURL:
-        productImages.honey,
-    },
-    {
-      title: "Immunity Capsules",
-      cost: 285,
-      sellingPrice: 267,
-      imageURL:
-        productImages.immunity,
-    },
-    {
-      title: "Tulsi Mulethi Green Tea",
-      cost: 260,
-      sellingPrice: 260,
-      imageURL:
-        productImages.tulsigreentea,
-    },
-    {
-      title: "Tulsi Mulethi Green Tea",
-      cost: 260,
-      sellingPrice: 260,
-      imageURL:
-        productImages.tulsitea,
-    },
-    {
-      title: "Quinoa",
-      cost: 260,
-      sellingPrice: 260,
-      imageURL:
-        productImages.quinoa,
-    },
-    {
-      title: "Triphla",
-      cost: 260,
-      sellingPrice: 260,
-      imageURL:
-        productImages.triphla,
-    },
-  ];
-
-  const BestSellingData = [
-    {
-      title: "Tulsi Honey Green Tea",
-      cost: 260,
-      sellingPrice: 260,
-      imageURL:
-        productImages.tulsihoney,
-    },
-
-    {
-      title: "Tulsi Tea",
-      cost: 260,
-      sellingPrice: 260,
-      imageURL:
-        productImages.tulsitea,
-    },
-    {
-      title: "Turmeric Immunity",
-      cost: 260,
-      sellingPrice: 260,
-      imageURL:
-        productImages.turmericimmun,
-    },
-    {
-      title: "Uptan",
-      cost: 260,
-      sellingPrice: 260,
-      imageURL:
-        productImages.uptan,
-    },
-    {
-      title: "Cleanseshake",
-      cost: 260,
-      sellingPrice: 260,
-      imageURL:
-        productImages.cleanseshake,
-    },
-  ];
-
   const ProductMerits = [
     {
       ImageUrl:

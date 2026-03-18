@@ -23,7 +23,7 @@ const SwiperHeroSection = () => {
     ]
 
   return (
-    <div className='w-full h-auto'>
+    <div className='w-full h-auto bg-[#f3f1e5]  pb-10 '>
         <style>{`
             .swiper-pagination {
                 position: absolute;

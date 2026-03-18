@@ -4,7 +4,7 @@ import Navbar from './components/Navbar'
 import Footer from './sections/Footer'
 const App = () => {
   return (
-    <div className='w-full' >
+    <div className='w-full bg-[#f3f1e5] ' >
       <Navbar></Navbar>
     <Routing/>
 <Footer></Footer>

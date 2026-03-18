@@ -6,12 +6,18 @@ import { BsSearch } from "react-icons/bs";
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { logoImages } from '../assets/images'
+import { Category1Data } from "../data/products";
+import { useCart } from "../context/CartContext";
 
 const Navbar = () => {
+  const { cartCount } = useCart();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobileShopOpen, setIsMobileShopOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const dropdownRef = useRef(null);
+  const searchRef = useRef(null);
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -29,6 +35,22 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isDropdownOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    if (isSearchOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSearchOpen]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -70,8 +92,13 @@ const Navbar = () => {
     },
   ];
 
+  const normalizedSearch = searchText.trim().toLowerCase();
+  const filteredProducts = Category1Data.filter((product) =>
+    product.title.toLowerCase().includes(normalizedSearch)
+  );
+
   return (
-    <div className=" top-0 left-0 right-0 z-50 w-full h-26 flex justify-between items-center px-4 lg:px-12 shadow-xl relative">
+    <div className=" top-0 left-0 right-0 z-50 w-full h-26 flex justify-between items-center px-4 lg:px-12 shadow-xl relative ">
       {/* Mobile: left menu icon */}
       <button
         className="lg:hidden w-10 h-10 grid place-items-center text-xl  "
@@ -85,7 +112,7 @@ const Navbar = () => {
       </button>
 
       {/* logo section  */}
-      <Link to={"/"} className="w-24 aspect-square  -ml-30 lg:ml-0">
+      <Link to={"/"} className="w-20 aspect-square  -ml-30 lg:ml-0">
         <img
           className="w-full h-full object-center object-contain"
           src={logoImages.lightlogo}
@@ -94,7 +121,7 @@ const Navbar = () => {
       </Link>
 
       {/* category section (desktop) */}
-      <div className="navCatSec hidden lg:flex gap-6 font-semibold">
+      <div className="navCatSec hidden lg:flex gap-6  font-[Montserrat] opacity-80">
         <div
           ref={dropdownRef}
           className="shopByCat flex justify-center items-center gap-1 cursor-pointer relative"
@@ -113,7 +140,7 @@ const Navbar = () => {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <div className="grid grid-cols-6 gap-6 ">
+              <div className="grid grid-cols-6 gap-6 font-[Open Sans] opacity-100! ">
                 {categories.map((category, index) => (
                   <div key={index} className="flex flex-col">
                     <h3 className="font-semibold text-black mb-3 text-sm h-10">
@@ -136,25 +163,85 @@ const Navbar = () => {
             </div>
           )}
         </div>
-        <div className="deal">Deal Of the Day</div>
-        <div className="combo">Combo Offers</div>
-        <div className="Track">Track Order</div>
+        <Link to={"/deal-of-the-day"} className="deal">
+          Deal Of the Day
+        </Link>
+        <Link to={"/combo-offers"} className="combo">
+          Combo Offers
+        </Link>
+        <Link to={"/track-order"} className="Track">
+          Track Order
+        </Link>
       </div>
 
       {/* user section  */}
-      <div className="userNavSec flex gap-5 text-lg font-semibold">
-        <div className="search">
-          <BsSearch />
+      <div className="userNavSec flex gap-5 text-lg font-semibold relative">
+        <div className="search relative" ref={searchRef}>
+          <button
+            type="button"
+            aria-label="Toggle search"
+            onClick={() => setIsSearchOpen((prev) => !prev)}
+            className="cursor-pointer"
+          >
+            <BsSearch />
+          </button>
+
+          {isSearchOpen && (
+            <div className="absolute top-full right-0 mt-3 w-80 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-3">
+              <input
+                type="text"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                placeholder="Search products..."
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-green-600"
+                autoFocus
+              />
+
+              <div className="max-h-72 overflow-y-auto mt-3">
+                {normalizedSearch.length === 0 ? (
+                  <p className="text-sm text-gray-500 px-2 py-1">
+                    Start typing to see products.
+                  </p>
+                ) : filteredProducts.length > 0 ? (
+                  filteredProducts.map((product, index) => (
+                    <Link
+                      to="/product"
+                      key={`${product.title}-${index}`}
+                      onClick={() => setIsSearchOpen(false)}
+                      className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-gray-50"
+                    >
+                      <img
+                        src={product.imageURL}
+                        alt={product.title}
+                        className="w-10 h-10 object-contain"
+                      />
+                      <div className="text-sm leading-tight">
+                        <p className="font-medium">{product.title}</p>
+                        <p className="text-gray-600">Rs. {product.sellingPrice}</p>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500 px-2 py-1">No products found.</p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
-        <div className="User">
+        <Link to="/user" className="User text-gray-800 hover:text-emerald-700 transition-colors">
           <AiOutlineUser />
-        </div>
+        </Link>
         <div className="wishlist">
           <AiOutlineHeart />
         </div>
-        <div className="cart">
+        <Link to="/cart" className="cart relative">
           <BsCart />
-        </div>
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 bg-green-700 text-white text-[11px] leading-5 text-center rounded-full">
+              {cartCount}
+            </span>
+          )}
+        </Link>
       </div>
 
       {/* Mobile Drawer */}
@@ -210,7 +297,7 @@ const Navbar = () => {
               )}
 
               <Link
-                to={"/"}
+                to={"/deal-of-the-day"}
                 className="block px-2 py-3 hover:bg-gray-50 rounded font-semibold"
                 onClick={() => setIsMobileOpen(false)}
               >
@@ -224,14 +311,14 @@ const Navbar = () => {
                 Blogs
               </Link>
               <Link
-                to={"/"}
+                to={"/combo-offers"}
                 className="block px-2 py-3 hover:bg-gray-50 rounded font-semibold"
                 onClick={() => setIsMobileOpen(false)}
               >
                 Combo Offer
               </Link>
               <Link
-                to={"/"}
+                to={"/track-order"}
                 className="block px-2 py-3 hover:bg-gray-50 rounded font-semibold"
                 onClick={() => setIsMobileOpen(false)}
               >

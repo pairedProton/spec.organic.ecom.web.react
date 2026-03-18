@@ -26,7 +26,7 @@ const VideoSection = () => {
   ]
 
   return (
-    <div className='w-full h-auto py-10 px-4 bg-white'>
+    <div className='w-full h-auto py-10 px-4 bg-[#f3f1e5]'>
       <div className="container mx-auto">
         <Swiper
           modules={[Autoplay]}
