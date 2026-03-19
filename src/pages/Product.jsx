@@ -1,101 +1,130 @@
-import React, { useState } from 'react'
-import { productImages } from '../assets/images';
-import { useCart } from '../context/CartContext';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+import { getProductDetails } from "../api/homeApi";
+import { productImages } from "../assets/images";
+
 const Product = () => {
+  const { id } = useParams();
   const { addToCart } = useCart();
+  const { isLoggedIn, openAuthModal } = useAuth();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const [quantity, setQuantity] = useState(1);
 
-  const product = {
-    id: "140059",
-    title: "Tulsi Green Tea Pomegranate Flavour",
-    brand: "Organic India",
-    imageMain:
-      productImages.tulsigreentea,
-    imageThumbs: [
-      productImages.tulsigreentea,
-      productImages.tulsigreentea,
-    ],
-    variant: "25 Infusion Bag",
-    sku: "140059",
-    price: 215,
-    mrp: 215,
-    usp: "INR 7.76 / Infusion bag",
-    offers: [
-      "Flat ₹900 off on Clean 7 Day Kit. T&C",
-      "Get 15% Off on orders above ₹1499/- T&C"
-    ],
-    description:
-      "Infused with fruity notes of pomegranate and sweet Hibiscus flowers, and the tangy flavour of Raspberries, this premium Green Tea with Tulsi is a delightful combination that will charm your tastebuds and brighten your day.",
-    ingredients:
-      "Green Tea, Rama Tulsi, Krishna Tulsi, Hibiscus, Vana Tulsi, Pomegranate Flower. Contains added natural flavours.",
-    info: [
-      { label: "Shelf Life", value: "30 Months" },
-      { label: "Product Dimension", value: "6.8 x 7.8 x 14.9 cm" },
-      { label: "Manufacturer", value: "ORGANIC INDIA Pvt. Ltd." },
-      {
-        label: "Manufacturer Address",
-        value:
-          "C-5/10, Agro Park, Phase II UPSIDC Industrial Area Kursi Road Barabanki-225302, Uttar Pradesh India"
-      },
-      { label: "Country Of Origin", value: "India" }
-    ],
-    faq: [
-      {
-        q: "Does this tea contain caffeine?",
-        a: "Yes, Green tea (Camellia Sinensis) contains caffeine."
-      },
-      {
-        q: "Are there any side effects of Tulsi Green Tea Pomegranate?",
-        a: "No known harmful side effects of this tea; there are only benefits."
-      },
-      {
-        q: "Can I add milk to the tea?",
-        a: "We recommend drinking it without milk."
+  const fallbackImage = productImages.amlapowder;
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await getProductDetails(id);
+        if (res.status) {
+          setProduct(res.data);
+          // Auto-select first variant
+          if (res.data.variants && res.data.variants.length > 0) {
+            setSelectedVariant(res.data.variants[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      } finally {
+        setLoading(false);
       }
-    ]
+    };
+    fetchProduct();
+  }, [id]);
+
+  const incrementQuantity = () => setQuantity(prev => prev + 1);
+  const decrementQuantity = () =>
+    setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+
+  const getVariantImage = variant => {
+    if (variant?.image && variant.image.trim() !== "") return variant.image;
+    return fallbackImage;
   };
 
-  const incrementQuantity = () => {
-    setQuantity((prev) => prev + 1);
-  };
-
-  const decrementQuantity = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  const getVariantImages = variant => {
+    if (variant?.images && variant.images.length > 0) return variant.images;
+    return [fallbackImage];
   };
 
   const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      openAuthModal();
+      return;
+    }
+    if (!product || !selectedVariant) return;
     addToCart(
       {
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        imageURL: product.imageMain,
+        id: selectedVariant.variant_id,
+        title: product.product_name,
+        price: parseFloat(selectedVariant.sale_price),
+        imageURL: getVariantImage(selectedVariant),
       },
-      quantity
+      quantity,
     );
   };
 
+  const handleBuyNow = () => {
+    if (!isLoggedIn) {
+      openAuthModal();
+      return;
+    }
+    handleAddToCart();
+  };
+
+  if (loading) {
+    return (
+      <div className="w-full h-[60vh] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-green-700 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="w-full h-[60vh] flex items-center justify-center">
+        <p className="text-gray-500 text-lg">Product not found.</p>
+      </div>
+    );
+  }
+
+  const mainImage = getVariantImage(selectedVariant);
+  const thumbImages = getVariantImages(selectedVariant);
+  const savings = selectedVariant
+    ? (
+        parseFloat(selectedVariant.price) -
+        parseFloat(selectedVariant.sale_price)
+      ).toFixed(2)
+    : 0;
+
   return (
     <div className="w-full ">
-      <div className="container mx-auto py-8  px-20">
+      <div className="container mx-auto py-8  px-6 md:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left: Gallery */}
           <div>
             <div className=" rounded-md w-full lg:w-[70%] aspect-5/6 overflow-hidden grid place-items-center">
               <img
-                src={product.imageMain}
-                alt={product.title}
+                src={mainImage}
+                alt={product.product_name}
                 className="w-full h-full object-contain"
               />
             </div>
 
             <div className="mt-4 flex gap-4 items-center overflow-x-auto">
-              {product.imageThumbs.map((src, idx) => (
+              {thumbImages.map((src, idx) => (
                 <div
                   key={idx}
-                  className="w-24 h-24  rounded-md shrink-0 overflow-hidden grid place-items-center cursor-pointer"
+                  className="w-24 h-24 rounded-md shrink-0 overflow-hidden grid place-items-center cursor-pointer border border-gray-200 hover:border-green-500 transition-colors"
                 >
-                  <img src={src} alt={`thumb-${idx}`} className="w-full h-full object-contain" />
+                  <img
+                    src={src}
+                    alt={`thumb-${idx}`}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
               ))}
             </div>
@@ -103,110 +132,168 @@ const Product = () => {
 
           {/* Right: Product Details */}
           <div>
-            <h1 className="text-2xl font-semibold">{product.title}</h1>
-            <div className="mt-2 text-sm">
-              <span className="text-gray-600">Brand :</span>{" "}
-              <span className="font-medium">{product.brand}</span>
-            </div>
+            <h1 className="text-2xl font-semibold">{product.product_name}</h1>
 
-            <div className="mt-4">
-              <h3 className="font-medium mb-2">Available Offers:</h3>
-              <ul className="space-y-1 text-sm">
-                {product.offers.map((offer) => (
-                  <li key={offer} className="flex items-start gap-2">
-                    <span className="text-green-600 mt-1">●</span>
-                    <span>{offer}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* Description */}
+            {product.description && (
+              <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+                {product.description}
+              </p>
+            )}
 
-            <div className="mt-6">
-              <div className="text-sm text-gray-600 mb-1">Select Variant</div>
-              <div className=" rounded-md p-3">
-                <div className="text-sm">{product.variant}</div>
-                <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
-                  <div>SKU: <span className="font-medium">{product.sku}</span></div>
-                  <div>MRP: ₹ {product.mrp.toFixed(2)}</div>
-                  <div className="col-span-2">USP: {product.usp}</div>
+            {/* Variant Selection */}
+            {product.variants && product.variants.length > 0 && (
+              <div className="mt-6">
+                <h3 className="font-medium mb-3 text-gray-800">
+                  Select Pack Size
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  {product.variants.map(variant => {
+                    const isSelected =
+                      selectedVariant?.variant_id === variant.variant_id;
+                    const variantSaving = (
+                      parseFloat(variant.price) - parseFloat(variant.sale_price)
+                    ).toFixed(2);
+
+                    return (
+                      <button
+                        key={variant.variant_id}
+                        onClick={() => {
+                          setSelectedVariant(variant);
+                          setQuantity(1);
+                        }}
+                        className={`relative flex flex-col items-center px-5 py-3 rounded-lg border-2 transition-all duration-200 cursor-pointer min-w-[120px]
+                          ${
+                            isSelected
+                              ? "border-green-600 bg-green-600 text-white shadow-md"
+                              : "border-gray-200 bg-white text-gray-800 hover:border-green-400"
+                          }`}
+                      >
+                        {/* Variant Name */}
+                        <span
+                          className={`text-sm font-semibold ${isSelected ? "text-white" : "text-gray-900"}`}
+                        >
+                          {variant.variant_name}
+                        </span>
+
+                        {/* Price */}
+                        <div className="mt-1 flex items-center gap-1.5">
+                          <span
+                            className={`text-base font-bold ${isSelected ? "text-white" : "text-gray-900"}`}
+                          >
+                            ₹{parseFloat(variant.sale_price).toFixed(0)}
+                          </span>
+                          {parseFloat(variant.price) >
+                            parseFloat(variant.sale_price) && (
+                            <span
+                              className={`text-xs line-through ${isSelected ? "text-green-100" : "text-gray-400"}`}
+                            >
+                              ₹{parseFloat(variant.price).toFixed(0)}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Savings Badge */}
+                        {parseFloat(variantSaving) > 0 && (
+                          <span
+                            className={`mt-1 text-xs font-medium px-2 py-0.5 rounded-full
+                            ${
+                              isSelected
+                                ? "bg-green-700 text-green-100"
+                                : "bg-green-50 text-green-700"
+                            }`}
+                          >
+                            Save ₹{parseFloat(variantSaving).toFixed(0)}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            </div>
+            )}
 
-            <div className="mt-6 flex items-center gap-4">
-              <div className="text-2xl font-semibold">₹ {product.price}</div>
-            </div>
+            {/* Selected Variant Price */}
+            {selectedVariant && (
+              <div className="mt-6 flex items-center gap-3">
+                <span className="text-3xl font-bold text-gray-900">
+                  ₹ {parseFloat(selectedVariant.sale_price).toFixed(2)}
+                </span>
+                {parseFloat(selectedVariant.price) >
+                  parseFloat(selectedVariant.sale_price) && (
+                  <span className="text-lg text-gray-400 line-through">
+                    ₹ {parseFloat(selectedVariant.price).toFixed(2)}
+                  </span>
+                )}
+                {parseFloat(savings) > 0 && (
+                  <span className="text-sm font-medium text-green-700 bg-green-50 px-2 py-1 rounded">
+                    You save ₹{parseFloat(savings).toFixed(2)}
+                  </span>
+                )}
+              </div>
+            )}
 
-            <div className="mt-6 flex  flex-col md:flex-row items-start md:items-center gap-4">
-              <div className="flex items-center  rounded">
-                <button type="button" className="px-3 py-2" onClick={decrementQuantity}>-</button>
-                <span className="px-4 select-none">{quantity}</span>
-                <button type="button" className="px-3 py-2" onClick={incrementQuantity}>+</button>
+            {/* Weight info */}
+            {selectedVariant && selectedVariant.weight && (
+              <div className="mt-2 text-sm text-gray-500">
+                Weight: {selectedVariant.weight} kg
               </div>
-              <div className='flex flex-col md:flex-row gap-2' >
-                
-              <button
-                type="button"
-                className="px-6 py-3 bg-green-700 text-white rounded hover:bg-green-800"
-                onClick={handleAddToCart}
-              >
-                ADD TO CART
-              </button>
-              <button type="button" className="px-6 py-3 bg-emerald-600 text-white rounded hover:bg-emerald-700">
-                BUY NOW
-              </button>
+            )}
+
+            {/* Quantity + Buttons */}
+            <div className="mt-6 flex flex-col md:flex-row items-start md:items-center gap-4">
+              <div className="flex items-center border border-gray-300 rounded-lg">
+                <button
+                  type="button"
+                  className="px-4 py-2 text-lg font-medium hover:bg-gray-100 rounded-l-lg transition-colors"
+                  onClick={decrementQuantity}
+                >
+                  −
+                </button>
+                <span className="px-5 py-2 select-none font-medium border-x border-gray-300">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  className="px-4 py-2 text-lg font-medium hover:bg-gray-100 rounded-r-lg transition-colors"
+                  onClick={incrementQuantity}
+                >
+                  +
+                </button>
               </div>
-              
+              <div className="flex flex-col md:flex-row gap-2">
+                <button
+                  type="button"
+                  className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 font-medium transition-colors"
+                  onClick={handleAddToCart}
+                >
+                  ADD TO CART
+                </button>
+                <button
+                  type="button"
+                  className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium transition-colors"
+                >
+                  BUY NOW
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Tabs */}
+        {/* Bottom: Description */}
         <div className="mt-12">
-          {/* <div className="flex gap-6 border-b">
-            <button className="py-3 px-1 border-b-2 border-black -mb-px">Description</button>
-            <button className="py-3 px-1 text-gray-500 hover:text-black">Ingredients</button>
-            <button className="py-3 px-1 text-gray-500 hover:text-black">Product Information</button>
-            <button className="py-3 px-1 text-gray-500 hover:text-black">FAQ</button>
-            <button className="py-3 px-1 text-gray-500 hover:text-black">Reviews</button>
-          </div> */}
-
-          <div className="p-6  rounded-b">
-          <div className="font-medium mb-2">Description</div>
-            <p className="text-sm leading-6 text-gray-800">{product.description}</p>
-          </div>
-
-          <div className="p-6  rounded mt-6">
-            <div className="font-medium mb-2">Ingredients</div>
-            <p className="text-sm leading-6 text-gray-800">{product.ingredients}</p>
-          </div>
-
-          <div className="p-6 rounded mt-6">
-            <div className="font-medium mb-3">Product Information</div>
-            <ul className="text-sm space-y-2">
-              {product.info.map((row) => (
-                <li key={row.label}>
-                  <span className="text-gray-600">{row.label} :</span> {row.value}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="p-6  rounded mt-6">
-            <div className="font-medium mb-3">FAQ</div>
-            <ul className="space-y-4 text-sm">
-              {product.faq.map((f, i) => (
-                <li key={i}>
-                  <div className="font-medium">{i + 1}. {f.q}</div>
-                  <div className="text-gray-700">{f.a}</div>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {product.description && (
+            <div className="p-6 rounded-b">
+              <div className="font-medium mb-2 text-lg">Description</div>
+              <p className="text-sm leading-6 text-gray-800">
+                {product.description}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default Product
+export default Product;

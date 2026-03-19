@@ -4,24 +4,30 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { AiOutlineUser } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs";
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { logoImages } from '../assets/images'
-import { Category1Data } from "../data/products";
+import { Link, useNavigate } from "react-router-dom";
+import { logoImages, productImages } from "../assets/images";
+import { searchProducts } from "../api/homeApi";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const { cartCount } = useCart();
+  const { isLoggedIn, user, openAuthModal, logout } = useAuth();
+  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobileShopOpen, setIsMobileShopOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const debounceRef = useRef(null);
   const dropdownRef = useRef(null);
   const searchRef = useRef(null);
 
   // Handle click outside to close dropdown
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = event => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
@@ -37,7 +43,7 @@ const Navbar = () => {
   }, [isDropdownOpen]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = event => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setIsSearchOpen(false);
       }
@@ -92,10 +98,40 @@ const Navbar = () => {
     },
   ];
 
-  const normalizedSearch = searchText.trim().toLowerCase();
-  const filteredProducts = Category1Data.filter((product) =>
-    product.title.toLowerCase().includes(normalizedSearch)
-  );
+  // Debounced API search
+  useEffect(() => {
+    const query = searchText.trim();
+    if (query.length === 0) {
+      setSearchResults([]);
+      setSearchLoading(false);
+      return;
+    }
+
+    setSearchLoading(true);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await searchProducts(query);
+        if (res.status) {
+          setSearchResults(res.data);
+        } else {
+          setSearchResults([]);
+        }
+      } catch (error) {
+        console.error("Search error:", error);
+        setSearchResults([]);
+      } finally {
+        setSearchLoading(false);
+      }
+    }, 400);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [searchText]);
+
+  const fallbackImage = productImages.amlapowder;
 
   return (
     <div className=" top-0 left-0 right-0 z-50 w-full h-26 flex justify-between items-center px-4 lg:px-12 shadow-xl relative ">
@@ -180,7 +216,7 @@ const Navbar = () => {
           <button
             type="button"
             aria-label="Toggle search"
-            onClick={() => setIsSearchOpen((prev) => !prev)}
+            onClick={() => setIsSearchOpen(prev => !prev)}
             className="cursor-pointer"
           >
             <BsSearch />
@@ -191,46 +227,74 @@ const Navbar = () => {
               <input
                 type="text"
                 value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
+                onChange={e => setSearchText(e.target.value)}
                 placeholder="Search products..."
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm outline-none focus:border-green-600"
                 autoFocus
               />
 
               <div className="max-h-72 overflow-y-auto mt-3">
-                {normalizedSearch.length === 0 ? (
+                {searchText.trim().length === 0 ? (
                   <p className="text-sm text-gray-500 px-2 py-1">
                     Start typing to see products.
                   </p>
-                ) : filteredProducts.length > 0 ? (
-                  filteredProducts.map((product, index) => (
+                ) : searchLoading ? (
+                  <div className="flex items-center justify-center py-4">
+                    <div className="w-6 h-6 border-3 border-green-700 border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                ) : searchResults.length > 0 ? (
+                  searchResults.map(product => (
                     <Link
-                      to="/product"
-                      key={`${product.title}-${index}`}
-                      onClick={() => setIsSearchOpen(false)}
+                      to={`/product/${product.product_id}`}
+                      key={product.variant_id}
+                      onClick={() => {
+                        setIsSearchOpen(false);
+                        setSearchText("");
+                      }}
                       className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-gray-50"
                     >
                       <img
-                        src={product.imageURL}
-                        alt={product.title}
-                        className="w-10 h-10 object-contain"
+                        src={
+                          product.image && product.image.trim() !== ""
+                            ? product.image
+                            : fallbackImage
+                        }
+                        alt={product.name}
+                        className="w-10 h-10 object-contain rounded"
                       />
                       <div className="text-sm leading-tight">
-                        <p className="font-medium">{product.title}</p>
-                        <p className="text-gray-600">Rs. {product.sellingPrice}</p>
+                        <p className="font-medium">{product.name}</p>
+                        <p className="text-green-700 font-semibold">
+                          ₹ {product.sale_price}
+                        </p>
                       </div>
                     </Link>
                   ))
                 ) : (
-                  <p className="text-sm text-gray-500 px-2 py-1">No products found.</p>
+                  <p className="text-sm text-gray-500 px-2 py-1">
+                    No products found.
+                  </p>
                 )}
               </div>
             </div>
           )}
         </div>
-        <Link to="/user" className="User text-gray-800 hover:text-emerald-700 transition-colors">
+        <button
+          onClick={() => {
+            if (isLoggedIn) {
+              navigate("/user");
+            } else {
+              openAuthModal();
+            }
+          }}
+          className="User text-gray-800 hover:text-emerald-700 transition-colors cursor-pointer relative"
+          title={isLoggedIn ? user?.name : "Login / Register"}
+        >
           <AiOutlineUser />
-        </Link>
+          {isLoggedIn && (
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
+          )}
+        </button>
         <div className="wishlist">
           <AiOutlineHeart />
         </div>
@@ -274,13 +338,13 @@ const Navbar = () => {
               </button>
               {isMobileShopOpen && (
                 <div className="pl-3">
-                  {categories.map((category) => (
+                  {categories.map(category => (
                     <div key={category.title} className="py-2">
                       <div className="text-gray-700 text-xs uppercase tracking-wide mb-2">
                         {category.title}
                       </div>
                       <div className="flex flex-col gap-2">
-                        {category.items.map((item) => (
+                        {category.items.map(item => (
                           <Link
                             key={item}
                             to={"/category"}

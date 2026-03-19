@@ -5,7 +5,6 @@ import ProductCategory from "../sections/ProductCategory";
 import ProductMeritSection from "../sections/ProductMeritSection";
 import ReviewSection from "../sections/ReviewSection";
 import VideoSection from "../sections/VideoSection";
-import { Category1Data, BestSellingData } from "../data/products";
 
 const Home = () => {
   const ProductMerits = [
@@ -88,24 +87,23 @@ const Home = () => {
 
   return (
     <div className="w-full h-auto flex flex-col overflow-x-clip">
-      
       <SwiperHeroSection></SwiperHeroSection>
       <CategorySection></CategorySection>
 
       <ProductCategory
-        productArray={Category1Data}
+        categoryId={1}
         categoryTitle="Immunity Boosters"
       ></ProductCategory>
       <VideoSection></VideoSection>
 
       <ProductCategory
-        productArray={BestSellingData}
+        categoryId={2}
         categoryTitle="Best Selling Products"
       ></ProductCategory>
 
       <ProductMeritSection {...ProductMerits[0]}></ProductMeritSection>
       <ProductMeritSection {...ProductMerits[1]}></ProductMeritSection>
-      <ReviewSection  reviewsData={reviewsData} ></ReviewSection>
+      <ReviewSection reviewsData={reviewsData}></ReviewSection>
       <ProductMeritSection {...ProductMerits[2]}></ProductMeritSection>
     </div>
   );

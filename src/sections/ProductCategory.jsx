@@ -1,12 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import { Link } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
+import { getProductList } from "../api/homeApi";
 
-const ProductCategory = ({ productArray = [], categoryTitle = "" }) => {
-  const productCategoryData = productArray;
+const ProductCategory = ({ categoryId, categoryTitle = "" }) => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await getProductList(categoryId);
+        if (res.status) {
+          setProducts(res.data);
+        }
+      } catch (error) {
+        console.error(
+          `Error fetching products for category ${categoryId}:`,
+          error,
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [categoryId]);
+
+  if (loading) {
+    return (
+      <div className="w-full h-[200px] bg-[#f3f1e5] flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-green-700 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto w-full h-auto py-12 px-10 flex flex-col items-center justify-center  bg-[#f3f1e5] ">
@@ -44,8 +72,8 @@ const ProductCategory = ({ productArray = [], categoryTitle = "" }) => {
           className="w-full "
         >
           <div className=" aaa flex items-center justify-center w-full bg-[#f3f1e5] ">
-            {productCategoryData.map((product, index) => (
-              <SwiperSlide key={index} className="h-auto">
+            {products.map(product => (
+              <SwiperSlide key={product.variant_id} className="h-auto">
                 <ProductCard product={product} />
               </SwiperSlide>
             ))}
